@@ -13,12 +13,6 @@ class Scrapy:
                 }
             },
         }
-        self.site_dados = {
-            "scrap":{
-               "nome":"/html/body/div[1]/div/main/section[4]/div[3]/div/ul/li[1]/a/div[3]/h2",
-                "preco":"/html/body/div[1]/div/main/section[4]/div[3]/div/ul/li[1]/a/div[3]/div[2]/div/div/p"
-            }
-        }
 
         self.driver = webdriver.Chrome()
         self.driver.maximize_window()
@@ -38,11 +32,19 @@ class Scrapy:
         sleep(5)
 
     def raspagem_magalu_cell(self):
-        sleep(10)
-        elemento_nome = self.driver.find_element(By.XPATH,self.site_dados['scrap']['nome']).text
-        elemento_preco = self.driver.find_element(By.XPATH,self.site_dados['scrap']['preco']).text
-        print(elemento_nome)
-        print(elemento_preco)
+        for contador in range(1, 50):  # Comece com contador em 1
+            self.site_dados = {
+                "scrap": {
+                    "nome": f"/html/body/div[1]/div/main/section[4]/div[3]/div/ul/li[{contador}]/a/div[3]/h2",
+                    "preco": f"/html/body/div[1]/div/main/section[4]/div[3]/div/ul/li[{contador}]/a/div[3]/div[2]/div/div/p"
+                }
+            }
+ 
+            elemento_nome = self.driver.find_element(By.XPATH, self.site_dados['scrap']['nome']).text
+            elemento_preco = self.driver.find_element(By.XPATH, self.site_dados['scrap']['preco']).text
+            print(elemento_nome)
+            print(elemento_preco)
+            print(contador)
 
 
 
