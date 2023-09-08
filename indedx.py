@@ -37,20 +37,20 @@ class Scrapy:
         while True:
             self.site_dados = {
                 "scrap": {
-                    "nome": f"/html/body/div[1]/div/main/section[4]/div[3]/div/ul/li[{contador}]/a/div[3]/h2",
-                    "preco": f"/html/body/div[1]/div/main/section[4]/div[3]/div/ul/li[{contador}]/a/div[3]/div[2]/div/div/p",
+                    "nome": f"#__next > div > main > section:nth-child(5) > div.sc-dcJsrY.hmLryf > div > ul > li:nth-child({contador}) > a > div.sc-AHTeh.dnWGet > h2",
+                    "preco": f"#__next > div > main > section:nth-child(5) > div.sc-dcJsrY.hmLryf > div > ul > li:nth-child({contador}) > a > div.sc-AHTeh.dnWGet > div.sc-fqkvVR.hlqElk.sc-fUBkdm.bdcmKw > div > div > p", 
                     "next":  "/html/body/div[1]/div/main/section[4]/div[4]/nav/ul/li[9]"
                 }
             }
 
-            elemento_nome = self.driver.find_element(By.XPATH, self.site_dados['scrap']['nome']).text
-            elemento_preco = self.driver.find_element(By.XPATH, self.site_dados['scrap']['preco']).text
+            elemento_nome = self.driver.find_element(By.CSS_SELECTOR, self.site_dados['scrap']['nome']).text
+            elemento_preco = self.driver.find_element(By.CSS_SELECTOR, self.site_dados['scrap']['preco']).text
             print(elemento_nome)
             print(elemento_preco)
             print(contador)
 
             # Verifique se o elemento XPath existe, se não, saia do loop
-            if not self.elemento_xpath_existe(f"/html/body/div[1]/div/main/section[4]/div[3]/div/ul/li[{contador + 1}]/a/div[3]/h2"):
+            if not self.elemento_xpath_existe(f"#__next > div > main > section:nth-child(5) > div.sc-dcJsrY.hmLryf > div > ul > li:nth-child({contador + 1}) > a > div.sc-AHTeh.dnWGet > div.sc-fqkvVR.hlqElk.sc-fUBkdm.bdcmKw > div > div > p"):
                 try:
                     botao_proximo = self.driver.find_element(By.XPATH,self.site_dados['scrap']['next'])
                     botao_proximo.click()
@@ -60,7 +60,7 @@ class Scrapy:
                 except:
                     print('nao ah mais  paginas!')
                     break
-                    
+                
 
             contador += 1
 
@@ -68,7 +68,7 @@ class Scrapy:
 
     def elemento_xpath_existe(self, xpath):
         try:
-            self.driver.find_element(By.XPATH, xpath)
+            self.driver.find_element(By.CSS_SELECTOR, xpath)
             return True
         except:
             return False
