@@ -38,7 +38,8 @@ class Scrapy:
             self.site_dados = {
                 "scrap": {
                     "nome": f"/html/body/div[1]/div/main/section[4]/div[3]/div/ul/li[{contador}]/a/div[3]/h2",
-                    "preco": f"/html/body/div[1]/div/main/section[4]/div[3]/div/ul/li[{contador}]/a/div[3]/div[2]/div/div/p"
+                    "preco": f"/html/body/div[1]/div/main/section[4]/div[3]/div/ul/li[{contador}]/a/div[3]/div[2]/div/div/p",
+                    "next":  f"/html/body/div[1]/div/main/section[4]/div[4]/nav/ul/li[9]" #/html/body/div[1]/div/main/section[4]/div[4]/nav/ul/li[9]
                 }
             }
 
@@ -50,9 +51,22 @@ class Scrapy:
 
             # Verifique se o elemento XPath existe, se não, saia do loop
             if not self.elemento_xpath_existe(f"/html/body/div[1]/div/main/section[4]/div[3]/div/ul/li[{contador + 1}]/a/div[3]/h2"):
-                break
+                try:
+                    print('entrei no bloco "try"')
+                    botao_proximo = self.driver.find_element(By.XPATH,self.site_dados['scrap']['next'])
+                    sleep(3)
+                    botao_proximo.click()
+                    print('navegando para proxima pagina!!!')
+                    contador = 1
+                    sleep(2)
+                except:
+                    print('nao ah mais  paginas!')
+                    break
+                    
 
             contador += 1
+
+
 
     def elemento_xpath_existe(self, xpath):
         try:
