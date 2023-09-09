@@ -65,7 +65,6 @@ class Scrapy:
             print(texto_preco)
             print(contador)
 
-            # Verifique se o elemento XPath existe, se não, saia do loop
             if not self.elemento_xpath_existe(f"#__next > div > main > section:nth-child(5) > div.sc-dcJsrY.hmLryf > div > ul > li:nth-child({contador + 1}) > a > div.sc-AHTeh.dnWGet > div.sc-fqkvVR.hlqElk.sc-fUBkdm.bdcmKw > div > div > p"):
                 try:
                     botao_proximo = self.driver.find_element(By.XPATH,self.site_dados['scrap']['next'])
@@ -95,7 +94,6 @@ class Scrapy:
         print('Planilha criada com sucesso!')
 
     def envia_email(self):
-        # Configurações do servidor SMTP do Gmail
         smtp_server = 'smtp.gmail.com'
         smtp_port = 587
         email_sender =input('digite o seu gmail: ')
