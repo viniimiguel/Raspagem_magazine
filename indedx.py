@@ -2,7 +2,11 @@ from selenium import webdriver
 from time import sleep
 from selenium.webdriver.common.by import By
 import openpyxl
-
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
 class Scrapy:
     def __init__(self):
         self.site_link = 'https://www.magazineluiza.com.br/'
@@ -20,9 +24,10 @@ class Scrapy:
     def main(self):
         self.abre_o_site()
         self.chega()
-        sleep(10)
+        #sleep(10)
         self.raspagem_magalu_cell()
         self.cria_planilhas(armazena_nome, armazena_preco)
+        self.envia_email()
         sleep(100000)
 
     def abre_o_site(self):
@@ -89,13 +94,54 @@ class Scrapy:
         planilha.save('planilha_de_preco.xlsx')
         print('Planilha criada com sucesso!')
 
+    def envia_email(self):
+        # Configurações do servidor SMTP do Gmail
+        smtp_server = 'smtp.gmail.com'
+        smtp_port = 587
+        email_sender =input('digite o seu gmail: ')
+        email_password =input('digite sua senha: ')
+        recipient_email = input('pra que voce quer enviar o email?: ') 
+        email_subject = 'planilha de dados'
 
-    def elemento_xpath_existe(self, xpath):
+
+        email_body = 'segue em anaxo a planilha de dados: '
+
+
+        msg = MIMEMultipart()
+        msg['From'] = email_sender
+        msg['To'] = recipient_email
+        msg['Subject'] = email_subject
+        msg.attach(MIMEText(email_body, 'plain'))
+
+        filename = 'planilha_de_preco.xlsx'
+        attachment = open(filename, 'rb')
+
+        part = MIMEBase('application', 'octet-stream')
+        part.set_payload((attachment).read())
+        encoders.encode_base64(part)
+        part.add_header('Content-Disposition', "attachment; filename= %s" % filename)
+
+        msg.attach(part)
+
         try:
-            self.driver.find_element(By.CSS_SELECTOR, xpath)
-            return True
-        except:
-            return False
 
+            server = smtplib.SMTP(smtp_server, smtp_port)
+            server.starttls()
+            
+            server.login(email_sender, email_password)
+            
+            server.sendmail(email_sender, recipient_email, msg.as_string())
+            
+            server.quit()
+            
+            print('E-mail com anexo enviado com sucesso!')
+        except Exception as e:
+            print('Erro ao enviar o e-mail:', str(e))
+    def elemento_xpath_existe(self, xpath):
+            try:
+                self.driver.find_element(By.CSS_SELECTOR, xpath)
+                return True
+            except:
+                return False
 scrap = Scrapy()
 scrap.main()
