@@ -45,7 +45,7 @@ class Scrapy:
                 "scrap": {
                     "nome": f"#__next > div > main > section:nth-child(5) > div.sc-dcJsrY.hmLryf > div > ul > li:nth-child({contador}) > a > div.sc-AHTeh.dnWGet > h2",
                     "preco": f"#__next > div > main > section:nth-child(5) > div.sc-dcJsrY.hmLryf > div > ul > li:nth-child({contador}) > a > div.sc-AHTeh.dnWGet > div.sc-fqkvVR.hlqElk.sc-fUBkdm.bdcmKw > div > div > p", 
-                    "next":  "#__next > div > main > section:nth-child(5) > div.sc-dcJsrY.izaRHP > nav > ul > li:nth-child(9) > button" #/html/body/div[1]/div/main/section[4]/div[4]/nav/ul/li[9]
+                    "next":  "/html/body/div[1]/div/main/section[4]/div[4]/nav/ul/li[9]/button" #/html/body/div[1]/div/main/section[4]/div[4]/nav/ul/li[9]
                 }
             }
 
@@ -63,7 +63,7 @@ class Scrapy:
             # Verifique se o elemento XPath existe, se não, saia do loop
             if not self.elemento_xpath_existe(f"#__next > div > main > section:nth-child(5) > div.sc-dcJsrY.hmLryf > div > ul > li:nth-child({contador + 1}) > a > div.sc-AHTeh.dnWGet > div.sc-fqkvVR.hlqElk.sc-fUBkdm.bdcmKw > div > div > p"):
                 try:
-                    botao_proximo = self.driver.find_element(By.CLASS_NAME,self.site_dados['scrap']['next'])
+                    botao_proximo = self.driver.find_element(By.XPATH,self.site_dados['scrap']['next'])
                     botao_proximo.click()
                     sleep(4)
                     print('navegando para proxima pagina!!!')
