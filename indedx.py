@@ -64,7 +64,8 @@ class Scrapy:
 
             contador += 1
 
-
+    def cria_planilhas(self):
+        pass
 
     def elemento_xpath_existe(self, xpath):
         try:
