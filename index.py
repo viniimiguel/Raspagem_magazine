@@ -7,6 +7,8 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
+
+
 class Scrapy:
     def __init__(self):
         self.site_link = 'https://www.magazineluiza.com.br/'
@@ -49,32 +51,29 @@ class Scrapy:
                 "scrap": {
                     "nome": f"#__next > div > main > section:nth-child(5) > div.sc-dcJsrY.hmLryf > div > ul > li:nth-child({contador}) > a > div.sc-AHTeh.dnWGet > h2",
                     "preco": f"#__next > div > main > section:nth-child(5) > div.sc-dcJsrY.hmLryf > div > ul > li:nth-child({contador}) > a > div.sc-AHTeh.dnWGet > div.sc-fqkvVR.hlqElk.sc-fUBkdm.bdcmKw > div > div > p", 
-                    "next":  "/html/body/div[1]/div/main/section[4]/div[4]/nav/ul/li[9]/button" #/html/body/div[1]/div/main/section[4]/div[4]/nav/ul/li[9]
+                    "next":  "#__next > div > main > section:nth-child(5) > div.sc-dcJsrY.izaRHP > nav > ul > li:nth-child(9)" #/html/body/div[1]/div/main/section[4]/div[4]/nav/ul/li[9]
                 }
             }
 
-            elemento_nome = self.driver.find_element(By.CSS_SELECTOR, self.site_dados['scrap']['nome'])
-            texto_nome = elemento_nome.text
-            sleep(0.5)
-            elemento_preco = self.driver.find_element(By.CSS_SELECTOR, self.site_dados['scrap']['preco'])
-            texto_preco = elemento_preco.text
-            armazena_nome.append(texto_nome)
-            armazena_preco.append(texto_preco)
-            print(texto_nome)
-            print(texto_preco)
-            print(contador)
-
-            if not self.elemento_xpath_existe(f"#__next > div > main > section:nth-child(5) > div.sc-dcJsrY.hmLryf > div > ul > li:nth-child({contador + 1}) > a > div.sc-AHTeh.dnWGet > div.sc-fqkvVR.hlqElk.sc-fUBkdm.bdcmKw > div > div > p"):
-                try:
-                    botao_proximo = self.driver.find_element(By.XPATH,self.site_dados['scrap']['next'])
-                    botao_proximo.click()
-                    sleep(4)
-                    print('navegando para proxima pagina!!!')
-                    contador = 1
-                    sleep(2)
-                except:
-                    print('nao ah mais  paginas!')
-                    break
+            try:
+                elemento_nome = self.driver.find_element(By.CSS_SELECTOR, self.site_dados['scrap']['nome'])
+                texto_nome = elemento_nome.text
+                sleep(0.5)
+                elemento_preco = self.driver.find_element(By.CSS_SELECTOR, self.site_dados['scrap']['preco'])
+                texto_preco = elemento_preco.text
+                armazena_nome.append(texto_nome)
+                armazena_preco.append(texto_preco)
+                print(texto_nome)
+                print(texto_preco)
+                print(contador)
+            except:
+                botao_proximo = self.driver.find_element(By.CSS_SELECTOR,self.site_dados['scrap']['next'])
+                botao_proximo.click()
+                sleep(4)
+                print('navegando para proxima pagina!!!')
+                contador = 1
+                sleep(2)
+                print('nao ah mais  paginas!')
                 
 
             contador += 1
@@ -96,7 +95,7 @@ class Scrapy:
         smtp_server = 'smtp.gmail.com'
         smtp_port = 587
         email_sender =input('digite o seu gmail: ')
-        email_password =input('digite sua senha: ')
+        email_password =('ufiwahyqoyzgaihn')
         recipient_email = input('pra que voce quer enviar o email?: ') 
         email_subject = 'planilha de dados'
 
@@ -135,11 +134,5 @@ class Scrapy:
         except Exception as e:
             print('Erro ao enviar o e-mail:', str(e))
             
-    def elemento_xpath_existe(self, xpath):
-            try:
-                self.driver.find_element(By.CSS_SELECTOR, xpath)
-                return True
-            except:
-                return False
 scrap = Scrapy()
 scrap.main()
