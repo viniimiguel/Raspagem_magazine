@@ -24,11 +24,10 @@ class Scrapy:
     def main(self):
         self.abre_o_site()
         self.chega()
-        #sleep(10)
+        sleep(10)
         self.raspagem_magalu_cell()
         self.cria_planilhas(armazena_nome, armazena_preco)
         self.envia_email()
-        sleep(100000)
 
     def abre_o_site(self):
         self.driver.get(self.site_link)
@@ -135,6 +134,7 @@ class Scrapy:
             print('E-mail com anexo enviado com sucesso!')
         except Exception as e:
             print('Erro ao enviar o e-mail:', str(e))
+            
     def elemento_xpath_existe(self, xpath):
             try:
                 self.driver.find_element(By.CSS_SELECTOR, xpath)
