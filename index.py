@@ -7,6 +7,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
+from selenium.common.exceptions import NoSuchElementException
 
 
 class Scrapy:
@@ -51,7 +52,7 @@ class Scrapy:
                 "scrap": {
                     "nome": f"#__next > div > main > section:nth-child(5) > div.sc-dcJsrY.hmLryf > div > ul > li:nth-child({contador}) > a > div.sc-AHTeh.dnWGet > h2",
                     "preco": f"#__next > div > main > section:nth-child(5) > div.sc-dcJsrY.hmLryf > div > ul > li:nth-child({contador}) > a > div.sc-AHTeh.dnWGet > div.sc-fqkvVR.hlqElk.sc-fUBkdm.bdcmKw > div > div > p", 
-                    "next":  "#__next > div > main > section:nth-child(5) > div.sc-dcJsrY.izaRHP > nav > ul > li:nth-child(9)" #/html/body/div[1]/div/main/section[4]/div[4]/nav/ul/li[9]
+                    "next":  "#__next > div > main > section:nth-child(5) > div.sc-dcJsrY.izaRHP > nav > ul > li:nth-child(9) > button > svg" #/html/body/div[1]/div/main/section[4]/div[4]/nav/ul/li[9]
                 }
             }
 
@@ -66,15 +67,18 @@ class Scrapy:
                 print(texto_nome)
                 print(texto_preco)
                 print(contador)
-            except:
-                botao_proximo = self.driver.find_element(By.CSS_SELECTOR,self.site_dados['scrap']['next'])
-                botao_proximo.click()
-                sleep(4)
-                print('navegando para proxima pagina!!!')
-                contador = 1
-                sleep(2)
-                print('nao ah mais  paginas!')
-                
+
+            except NoSuchElementException:
+                try:
+                    botao_proximo = self.driver.find_element(By.CSS_SELECTOR,self.site_dados['scrap']['next'])
+                    if botao_proximo:
+                        botao_proximo.click()
+                        sleep(4)
+                        print('navegando para proxima pagina!!!')
+                        contador = 1
+                except:
+                    break
+
 
             contador += 1
     def cria_planilhas(self,armazena_nome, armazena_preco):
